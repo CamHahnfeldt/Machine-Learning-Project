@@ -47,6 +47,8 @@ team_mapping = {'ATL':1, 'BOS':2, 'BKN':3, 'CHA':4, 'CHI':5,
 combined['TEAM'] = combined['TEAM'].map(team_mapping)
 combined['MATCH UP'] = combined['MATCH UP'].map(team_mapping)
 
+win_loss_mapping = {'W':1, 'L':0}
+combined['W/L'] = combined['W/L'].map(win_loss_mapping)
 # Parse the 'GAME DATE' column to datetime if it's not already in that format
 combined['GAME DATE'] = pd.to_datetime(combined['GAME DATE'])
 
@@ -68,9 +70,9 @@ y = combined['W/L'] # Target variable
 
 # Split dataset into training set and test set
 # 70% training and 30% test
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=1)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
 
-forest = RandomForestClassifier()
+forest = RandomForestClassifier(n_estimators=100, random_state=42)
 forest.fit(X_train, y_train)
 y_test_pred=forest.predict(X_test)
 y_train_pred=forest.predict(X_train)
