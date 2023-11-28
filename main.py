@@ -77,7 +77,7 @@ y = combined['W/L'] # Target variable
 # 70% training and 30% test
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
 
-forest = RandomForestClassifier(n_estimators=20, max_depth = 10, random_state=42)
+forest = RandomForestClassifier(n_estimators=100, max_depth = 3, random_state=42)
 forest.fit(X_train, y_train)
 y_test_pred=forest.predict(X_test)
 y_train_pred=forest.predict(X_train)
@@ -85,7 +85,7 @@ forest_train = metrics.accuracy_score(y_train, y_train_pred)
 forest_test = metrics.accuracy_score(y_test, y_test_pred)
 
 # Model Accuracy, how often is the classifier correct?
-print("Accuracy of testing:",metrics.accuracy_score(y_test, y_test_pred))
+print("Accuracy of Random Forest testing:",metrics.accuracy_score(y_test, y_test_pred))
 print(f"Random forest train / test accuracies: {forest_train} / {forest_test}")
 
 ## Gradient Boosting algorithm
@@ -97,8 +97,14 @@ gb_clf = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_dep
 gb_clf.fit(X_train, y_train)
 
 # Make predictions
-y_pred = gb_clf.predict(X_test)
+y_pred_test = gb_clf.predict(X_test)
+y_pred_train = gb_clf.predict(X_train)
+boost_train = metrics.accuracy_score(y_train, y_pred_train)
+boost_test = metrics.accuracy_score(y_test, y_pred_test)
 
 # Evaluate the model
-accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy of Gradient Boosting testing:",metrics.accuracy_score(y_test, y_pred_test))
+print(f"Gradient Boosting train / test accuracies: {boost_train} / {boost_test}")
+
+accuracy = accuracy_score(y_test, y_pred_test)
 print(f"Model Accuracy: {accuracy:.2f}")
