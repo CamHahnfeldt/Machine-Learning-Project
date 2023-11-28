@@ -65,7 +65,7 @@ combined['DAY'] = combined['GAME DATE'].dt.day
 
 combined.drop('GAME DATE', axis=1, inplace=True)
 
-print(combined)
+#print(combined)
 
 feature_cols = ['TEAM', 'MATCH UP', 'PTS',
 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FT%',
