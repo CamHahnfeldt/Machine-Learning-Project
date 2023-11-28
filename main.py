@@ -3,6 +3,12 @@ from sklearn.ensemble import RandomForestClassifier # Import RandomForest Classi
 from sklearn.model_selection import train_test_split # Import train_test_split function
 from sklearn import metrics #Import scikit-learn metrics module for accuracy calculation
 import numpy as np
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.metrics import accuracy_score
+from sklearn import model_selection
+
 #make sure you have your labels correct
 #some files have this in the file - others it is in the description
 #if it is in the file you can copy them here then delete that line in the file
@@ -61,18 +67,17 @@ combined.drop('GAME DATE', axis=1, inplace=True)
 
 print(combined)
 
-feature_cols = ['TEAM', 'MATCH UP', 'MIN', 'PTS',
+feature_cols = ['TEAM', 'MATCH UP', 'PTS',
 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FT%',
-'OREB', 'DREB', 'REB', 'AST', 'TOV', 'STL', 'BLK', 'PF', '+/-', 'YEAR', 'MONTH', 'DAY']
+'OREB', 'DREB', 'REB', 'AST', 'TOV', 'STL', 'BLK', 'PF', 'YEAR', 'MONTH', 'DAY']
 X = combined[feature_cols] # Features
 y = combined['W/L'] # Target variable
-
 
 # Split dataset into training set and test set
 # 70% training and 30% test
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
 
-forest = RandomForestClassifier(n_estimators=100, random_state=42)
+forest = RandomForestClassifier(n_estimators=20, max_depth = 10, random_state=42)
 forest.fit(X_train, y_train)
 y_test_pred=forest.predict(X_test)
 y_train_pred=forest.predict(X_train)
@@ -82,3 +87,18 @@ forest_test = metrics.accuracy_score(y_test, y_test_pred)
 # Model Accuracy, how often is the classifier correct?
 print("Accuracy of testing:",metrics.accuracy_score(y_test, y_test_pred))
 print(f"Random forest train / test accuracies: {forest_train} / {forest_test}")
+
+## Gradient Boosting algorithm
+
+# Initialize Gradient Boosting Classifier
+gb_clf = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42)
+
+# Train the model
+gb_clf.fit(X_train, y_train)
+
+# Make predictions
+y_pred = gb_clf.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Model Accuracy: {accuracy:.2f}")
