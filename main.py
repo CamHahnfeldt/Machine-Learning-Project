@@ -59,11 +59,11 @@ combined['DAY'] = combined['GAME DATE'].dt.day
 
 combined.drop('GAME DATE', axis=1, inplace=True)
 
-print(combined)
+#print(combined)
 
 feature_cols = ['TEAM', 'MATCH UP', 'MIN', 'PTS',
 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FT%',
-'OREB', 'DREB', 'REB', 'AST', 'TOV', 'STL', 'BLK', 'PF', '+/-', 'YEAR', 'MONTH', 'DAY']
+'OREB', 'DREB', 'REB', 'AST', 'TOV', 'STL', 'BLK', 'PF', 'YEAR', 'MONTH', 'DAY']
 X = combined[feature_cols] # Features
 y = combined['W/L'] # Target variable
 
