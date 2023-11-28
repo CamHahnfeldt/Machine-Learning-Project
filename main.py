@@ -101,19 +101,18 @@ def lookAtModels(models):
         results.append(cv_results)
         names.append(name)
         print(f'{name}: {cv_results.mean()} ({cv_results.std()})')
-    return names, results#not sure why I want lists yet
+    return names, results
 
-models =[]
+#models =[]
 #for d in range(2,20):
 #    models.append((f'Tree depth{d}',GradientBoostingClassifier(max_depth=d)))
 
 #names,results = lookAtModels(models)
 
-
 ## Gradient Boosting algorithm
 
 # Initialize Gradient Boosting Classifier
-gb_clf = GradientBoostingClassifier(n_estimators=100, learning_rate=0.02, max_depth=4, random_state=42)
+gb_clf = GradientBoostingClassifier(n_estimators=70, learning_rate=0.1, max_depth=4, random_state=42)
 
 # Train the model
 gb_clf.fit(X_train, y_train)
