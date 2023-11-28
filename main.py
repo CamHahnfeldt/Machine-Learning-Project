@@ -9,6 +9,9 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.metrics import accuracy_score
 from sklearn import model_selection
 
+from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import cross_val_score
+
 #make sure you have your labels correct
 #some files have this in the file - others it is in the description
 #if it is in the file you can copy them here then delete that line in the file
@@ -77,7 +80,7 @@ y = combined['W/L'] # Target variable
 # 70% training and 30% test
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
 
-forest = RandomForestClassifier(n_estimators=100, max_depth = 3, random_state=42)
+forest = RandomForestClassifier(n_estimators=100, max_depth = 11, random_state=42)
 forest.fit(X_train, y_train)
 y_test_pred=forest.predict(X_test)
 y_train_pred=forest.predict(X_train)
@@ -88,10 +91,29 @@ forest_test = metrics.accuracy_score(y_test, y_test_pred)
 print("Accuracy of Random Forest testing:",metrics.accuracy_score(y_test, y_test_pred))
 print(f"Random forest train / test accuracies: {forest_train} / {forest_test}")
 
+## Determining the best tree depth for each classifier
+def lookAtModels(models):
+    results=[]
+    names=[]
+    for name, model in models:
+        skfold = StratifiedKFold(n_splits=10)
+        cv_results= cross_val_score(model, X_train, y_train, cv=skfold,scoring='accuracy')
+        results.append(cv_results)
+        names.append(name)
+        print(f'{name}: {cv_results.mean()} ({cv_results.std()})')
+    return names, results#not sure why I want lists yet
+
+models =[]
+#for d in range(2,20):
+#    models.append((f'Tree depth{d}',GradientBoostingClassifier(max_depth=d)))
+
+#names,results = lookAtModels(models)
+
+
 ## Gradient Boosting algorithm
 
 # Initialize Gradient Boosting Classifier
-gb_clf = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42)
+gb_clf = GradientBoostingClassifier(n_estimators=100, learning_rate=0.02, max_depth=4, random_state=42)
 
 # Train the model
 gb_clf.fit(X_train, y_train)
