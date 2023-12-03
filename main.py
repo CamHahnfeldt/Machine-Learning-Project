@@ -92,6 +92,8 @@ y_train_pred=forest.predict(X_train)
 forest_train = metrics.accuracy_score(y_train, y_train_pred)
 forest_test = metrics.accuracy_score(y_test, y_test_pred)
 
+print("Random Forest")
+
 # Model Accuracy, how often is the classifier correct?
 print("Accuracy of Random Forest testing:",metrics.accuracy_score(y_test, y_test_pred))
 print(f"Random forest train / test accuracies: {forest_train} / {forest_test}")
@@ -169,12 +171,14 @@ y_pred_train = gb_clf.predict(X_train)
 boost_train = metrics.accuracy_score(y_train, y_pred_train)
 boost_test = metrics.accuracy_score(y_test, y_pred_test)
 
+print("\nGradient Boosting")
+
 # Evaluate the model
 print("Accuracy of Gradient Boosting testing:",metrics.accuracy_score(y_test, y_pred_test))
 print(f"Gradient Boosting train / test accuracies: {boost_train} / {boost_test}")
-#
-# accuracy = accuracy_score(y_test, y_pred_test)
-# print(f"Model Accuracy: {accuracy:.2f}")
+
+accuracy = accuracy_score(y_test, y_pred_test)
+print(f"Model Accuracy: {accuracy:.2f}")
 
 # #k-fold
 # kfold = model_selection.KFold(n_splits=10)
@@ -194,63 +198,63 @@ print(f"Gradient Boosting train / test accuracies: {boost_train} / {boost_test}"
 # results_loocv = model_selection.cross_val_score(model_loocv, X, y, cv=loocv)
 # print(f"LOOCV Accuracy: {results_loocv.mean()} ({results_loocv.std()})")
 
-# #Repeated Random Test-Train splits
-# kfold2 = model_selection.ShuffleSplit(n_splits=10, test_size=0.30, random_state=42)
-# model_shufflecv = GradientBoostingClassifier()
-# results_shufflecv = model_selection.cross_val_score(model_shufflecv, X, y, cv=kfold2)
-# print(f"Repeated Random Accuracy: {results_shufflecv.mean()} ({results_shufflecv.std()})")
-# #
-# # def lookAtModels(models):
-# #     results=[]
-# #     names=[]
-# #     for name, model in models:
-# #         kfold2 = model_selection.ShuffleSplit(n_splits=10, test_size=0.30,
-# #                                               random_state=42)
-# #         model_shufflecv = GradientBoostingClassifier()
-# #         results_shufflecv = model_selection.cross_val_score(model_shufflecv, X,
-# #                                                             y, cv=kfold2)
-# #         results.append(results_shufflecv)
-# #         names.append(name)
-# #         print(f'{name}: {results_shufflecv.mean()} ({results_shufflecv.std()})')
-# #     return names, results
+#Repeated Random Test-Train splits
+kfold2 = model_selection.ShuffleSplit(n_splits=10, test_size=0.30, random_state=42)
+model_shufflecv = GradientBoostingClassifier()
+results_shufflecv = model_selection.cross_val_score(model_shufflecv, X, y, cv=kfold2)
+print(f"Repeated Random Test-Train Splits Accuracy: {results_shufflecv.mean()} ({results_shufflecv.std()})")
 #
-# #Create Confusion Matrix
-# conf_mat = confusion_matrix(y_test, y_pred_test)
-# #Display Confusion Matrix
-# cm_display = ConfusionMatrixDisplay(confusion_matrix=conf_mat)
-# cm_display.plot(cmap='Blues', values_format='d')
-# plt.title('Confusion Matrix')
-# plt.show()
-#
-# #Look at the other results
-# print(metrics.classification_report(y_test,y_pred_test))
-#
-# #Calculate sensitivity and specificity for each class
-# n_classes = conf_mat.shape[0]
-# for i in range(n_classes):
-#     tp = conf_mat[i, i]
-#     fn = sum(conf_mat[i, :]) - tp
-#     fp = sum(conf_mat[:, i]) - tp
-#     tn = sum(sum(conf_mat)) - tp - fn - fp
-#
-#     tpr = tp / (tp + fn)
-#     tnr = tn / (tn + fp)
-#     print(f"Class {i}: TPR = {tpr:.2f}, TNR = {tnr:.2f}")
-#
-# #ROC curve
-# from sklearn.metrics import RocCurveDisplay
-# fpr, tpr, thresholds = metrics.roc_curve(y_test,y_pred_test)
-# roc_auc = metrics.auc(fpr, tpr)
-# roc_displayDT = RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc, estimator_name='Gradient Boosting')
-#
-# # Precision-Recall Curve
-# from sklearn.metrics import precision_recall_curve
-# from sklearn.metrics import PrecisionRecallDisplay
-# prec, recall, _ = precision_recall_curve(y_test, y_pred_test)
-# pr_displayDT = PrecisionRecallDisplay(precision=prec, recall=recall)
-#
-# #Curves side by side
-# fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
-# roc_displayDT.plot(ax=ax1)
-# pr_displayDT.plot(ax=ax2)
-# plt.show()
+# def lookAtModels(models):
+#     results=[]
+#     names=[]
+#     for name, model in models:
+#         kfold2 = model_selection.ShuffleSplit(n_splits=10, test_size=0.30,
+#                                               random_state=42)
+#         model_shufflecv = GradientBoostingClassifier()
+#         results_shufflecv = model_selection.cross_val_score(model_shufflecv, X,
+#                                                             y, cv=kfold2)
+#         results.append(results_shufflecv)
+#         names.append(name)
+#         print(f'{name}: {results_shufflecv.mean()} ({results_shufflecv.std()})')
+#     return names, results
+
+#Create Confusion Matrix
+conf_mat = confusion_matrix(y_test, y_pred_test)
+#Display Confusion Matrix
+cm_display = ConfusionMatrixDisplay(confusion_matrix=conf_mat)
+cm_display.plot(cmap='Blues', values_format='d')
+plt.title('Confusion Matrix')
+plt.show()
+
+#Look at the other results
+print(metrics.classification_report(y_test,y_pred_test))
+
+#Calculate sensitivity and specificity for each class
+n_classes = conf_mat.shape[0]
+for i in range(n_classes):
+    tp = conf_mat[i, i]
+    fn = sum(conf_mat[i, :]) - tp
+    fp = sum(conf_mat[:, i]) - tp
+    tn = sum(sum(conf_mat)) - tp - fn - fp
+
+    tpr = tp / (tp + fn)
+    tnr = tn / (tn + fp)
+    print(f"Class {i}: TPR = {tpr:.2f}, TNR = {tnr:.2f}")
+
+#ROC curve
+from sklearn.metrics import RocCurveDisplay
+fpr, tpr, thresholds = metrics.roc_curve(y_test,y_pred_test)
+roc_auc = metrics.auc(fpr, tpr)
+roc_displayDT = RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc, estimator_name='Gradient Boosting')
+
+# Precision-Recall Curve
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import PrecisionRecallDisplay
+prec, recall, _ = precision_recall_curve(y_test, y_pred_test)
+pr_displayDT = PrecisionRecallDisplay(precision=prec, recall=recall)
+
+#Curves side by side
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
+roc_displayDT.plot(ax=ax1)
+pr_displayDT.plot(ax=ax2)
+plt.show()
