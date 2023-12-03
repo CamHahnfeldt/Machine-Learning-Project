@@ -75,7 +75,7 @@ combined.drop('GAME DATE', axis=1, inplace=True)
 
 #print(combined)
 
-feature_cols = ['TEAM', 'MATCH UP', #'PTS', #removing points gave slightly better accuracy
+feature_cols = ['TEAM', 'MATCH UP', 'PTS',
 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FT%',
 'OREB', 'DREB', 'REB', 'AST', 'TOV', 'STL', 'BLK', 'PF', 'YEAR', 'MONTH', 'DAY']
 X = combined[feature_cols] # Features
@@ -172,22 +172,12 @@ print(f"Repeated Random Accuracy: {results_shufflecv.mean()} ({results_shufflecv
 #         names.append(name)
 #         print(f'{name}: {results_shufflecv.mean()} ({results_shufflecv.std()})')
 #     return names, results
-#
-# #make models
-# models =[]
-# for d in range(2,9):
-#     models.append((f'Tree depth {d}',
-#                    GradientBoostingClassifier(criterion="entropy",max_depth=d)))
-#
-# #see your results
-# names,results = lookAtModels(models)
 
 #Create Confusion Matrix
 conf_mat = confusion_matrix(y_test, y_pred_test)
 #Display Confusion Matrix
 cm_display = ConfusionMatrixDisplay(confusion_matrix=conf_mat)
 cm_display.plot(cmap='Blues', values_format='d')
-
 plt.title('Confusion Matrix')
 plt.show()
 
@@ -218,7 +208,7 @@ from sklearn.metrics import PrecisionRecallDisplay
 prec, recall, _ = precision_recall_curve(y_test, y_pred_test)
 pr_displayDT = PrecisionRecallDisplay(precision=prec, recall=recall)
 
-#side by side
+#Curves side by side
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
 roc_displayDT.plot(ax=ax1)
 pr_displayDT.plot(ax=ax2)
