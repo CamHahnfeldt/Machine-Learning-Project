@@ -1,3 +1,4 @@
+import matplotlib
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier # Import RandomForest Classifier
 from sklearn.model_selection import train_test_split # Import train_test_split function
@@ -11,6 +12,10 @@ from sklearn import model_selection
 
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import cross_val_score
+
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import ConfusionMatrixDisplay
 
 #make sure you have your labels correct
 #some files have this in the file - others it is in the description
@@ -70,7 +75,7 @@ combined.drop('GAME DATE', axis=1, inplace=True)
 
 #print(combined)
 
-feature_cols = ['TEAM', 'MATCH UP', 'PTS',
+feature_cols = ['TEAM', 'MATCH UP', #'PTS', #removing points gave slightly better accuracy
 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FT%',
 'OREB', 'DREB', 'REB', 'AST', 'TOV', 'STL', 'BLK', 'PF', 'YEAR', 'MONTH', 'DAY']
 X = combined[feature_cols] # Features
@@ -87,9 +92,9 @@ y_train_pred=forest.predict(X_train)
 forest_train = metrics.accuracy_score(y_train, y_train_pred)
 forest_test = metrics.accuracy_score(y_test, y_test_pred)
 
-# Model Accuracy, how often is the classifier correct?
-print("Accuracy of Random Forest testing:",metrics.accuracy_score(y_test, y_test_pred))
-print(f"Random forest train / test accuracies: {forest_train} / {forest_test}")
+# # Model Accuracy, how often is the classifier correct?
+# print("Accuracy of Random Forest testing:",metrics.accuracy_score(y_test, y_test_pred))
+# print(f"Random forest train / test accuracies: {forest_train} / {forest_test}")
 
 ## Determining the best tree depth for each classifier
 def lookAtModels(models):
@@ -126,6 +131,65 @@ boost_test = metrics.accuracy_score(y_test, y_pred_test)
 # Evaluate the model
 print("Accuracy of Gradient Boosting testing:",metrics.accuracy_score(y_test, y_pred_test))
 print(f"Gradient Boosting train / test accuracies: {boost_train} / {boost_test}")
+#
+# accuracy = accuracy_score(y_test, y_pred_test)
+# print(f"Model Accuracy: {accuracy:.2f}")
 
-accuracy = accuracy_score(y_test, y_pred_test)
-print(f"Model Accuracy: {accuracy:.2f}")
+# #k-fold
+# kfold = model_selection.KFold(n_splits=10)
+# model_kfold = GradientBoostingClassifier()
+# results_kfold = model_selection.cross_val_score(model_kfold, X, y, cv=kfold)
+# print(f"K-Fold Accuracy: {results_kfold.mean()} ({results_kfold.std()})")
+#
+# #stratified k-fold
+# skfold = StratifiedKFold(n_splits=10)
+# model_skfold = GradientBoostingClassifier()
+# results_skfold = model_selection.cross_val_score(model_skfold, X, y, cv=skfold)
+# print(f"Stratified K-Fold Accuracy: {results_skfold.mean()} ({results_skfold.std()})")
+
+# #LOOCV
+# loocv = model_selection.LeaveOneOut()
+# model_loocv = GradientBoostingClassifier()
+# results_loocv = model_selection.cross_val_score(model_loocv, X, y, cv=loocv)
+# print(f"LOOCV Accuracy: {results_loocv.mean()} ({results_loocv.std()})")
+
+#Repeated Random Test-Train splits
+kfold2 = model_selection.ShuffleSplit(n_splits=10, test_size=0.30, random_state=42)
+model_shufflecv = GradientBoostingClassifier()
+results_shufflecv = model_selection.cross_val_score(model_shufflecv, X, y, cv=kfold2)
+print(f"Repeated Random Accuracy: {results_shufflecv.mean()} ({results_shufflecv.std()})")
+#
+# def lookAtModels(models):
+#     results=[]
+#     names=[]
+#     for name, model in models:
+#         kfold2 = model_selection.ShuffleSplit(n_splits=10, test_size=0.30,
+#                                               random_state=42)
+#         model_shufflecv = GradientBoostingClassifier()
+#         results_shufflecv = model_selection.cross_val_score(model_shufflecv, X,
+#                                                             y, cv=kfold2)
+#         results.append(results_shufflecv)
+#         names.append(name)
+#         print(f'{name}: {results_shufflecv.mean()} ({results_shufflecv.std()})')
+#     return names, results
+#
+# #make models
+# models =[]
+# for d in range(2,9):
+#     models.append((f'Tree depth {d}',
+#                    GradientBoostingClassifier(criterion="entropy",max_depth=d)))
+#
+# #see your results
+# names,results = lookAtModels(models)
+
+#Create Confusion Matrix
+conf_mat = confusion_matrix(y_test, y_pred_test)
+#Display Confusion Matrix
+cm_display = ConfusionMatrixDisplay(confusion_matrix=conf_mat)
+cm_display.plot(cmap='Blues', values_format='d')
+
+plt.title('Confusion Matrix')
+plt.show()
+
+#Look at the other results
+print(metrics.classification_report(y_test,y_pred_test))
