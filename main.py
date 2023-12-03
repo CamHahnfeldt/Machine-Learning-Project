@@ -193,3 +193,33 @@ plt.show()
 
 #Look at the other results
 print(metrics.classification_report(y_test,y_pred_test))
+
+#Calculate sensitivity and specificity for each class
+n_classes = conf_mat.shape[0]
+for i in range(n_classes):
+    tp = conf_mat[i, i]
+    fn = sum(conf_mat[i, :]) - tp
+    fp = sum(conf_mat[:, i]) - tp
+    tn = sum(sum(conf_mat)) - tp - fn - fp
+
+    tpr = tp / (tp + fn)
+    tnr = tn / (tn + fp)
+    print(f"Class {i}: TPR = {tpr:.2f}, TNR = {tnr:.2f}")
+
+#ROC curve
+from sklearn.metrics import RocCurveDisplay
+fpr, tpr, thresholds = metrics.roc_curve(y_test,y_pred_test)
+roc_auc = metrics.auc(fpr, tpr)
+roc_displayDT = RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc, estimator_name='Gradient Boosting')
+
+# Precision-Recall Curve
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import PrecisionRecallDisplay
+prec, recall, _ = precision_recall_curve(y_test, y_pred_test)
+pr_displayDT = PrecisionRecallDisplay(precision=prec, recall=recall)
+
+#side by side
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
+roc_displayDT.plot(ax=ax1)
+pr_displayDT.plot(ax=ax2)
+plt.show()
