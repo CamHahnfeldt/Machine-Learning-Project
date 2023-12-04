@@ -75,7 +75,7 @@ combined.drop('GAME DATE', axis=1, inplace=True)
 
 #print(combined)
 
-feature_cols = ['TEAM', 'MATCH UP', 'PTS',
+feature_cols = ['TEAM', 'MATCH UP', #'PTS',
 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FT%',
 'OREB', 'DREB', 'REB', 'AST', 'TOV', 'STL', 'BLK', 'PF', 'YEAR', 'MONTH', 'DAY']
 X = combined[feature_cols] # Features
