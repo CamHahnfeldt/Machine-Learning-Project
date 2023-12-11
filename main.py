@@ -103,7 +103,7 @@ conf_mat = confusion_matrix(y_test, y_test_pred)
 #Display Confusion Matrix
 cm_display = ConfusionMatrixDisplay(confusion_matrix=conf_mat)
 cm_display.plot(cmap='Blues', values_format='d')
-plt.title('Confusion Matrix')
+plt.title('Random Forest Confusion Matrix')
 plt.show()
 
 #Look at the other results
@@ -228,7 +228,7 @@ conf_mat = confusion_matrix(y_test, y_pred_test)
 #Display Confusion Matrix
 cm_display = ConfusionMatrixDisplay(confusion_matrix=conf_mat)
 cm_display.plot(cmap='Blues', values_format='d')
-plt.title('Confusion Matrix')
+plt.title('Gradient Boosting Confusion Matrix')
 plt.show()
 
 #Look at the other results
