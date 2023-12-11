@@ -122,10 +122,10 @@ for i in range(n_classes):
     print(f"Class {i}: TPR = {tpr:.2f}, TNR = {tnr:.2f}")
 
 #ROC curve
-from sklearn.metrics import RocCurveDisplay
-fpr, tpr, thresholds = metrics.roc_curve(y_test,y_test_pred)
-roc_auc = metrics.auc(fpr, tpr)
-roc_displayDT = RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc, estimator_name='Random Forest')
+# from sklearn.metrics import RocCurveDisplay
+# fpr, tpr, thresholds = metrics.roc_curve(y_test,y_test_pred)
+# roc_auc = metrics.auc(fpr, tpr)
+# roc_displayDT = RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc, estimator_name='Random Forest')
 
 # Precision-Recall Curve
 from sklearn.metrics import precision_recall_curve
@@ -247,10 +247,10 @@ for i in range(n_classes):
     print(f"Class {i}: TPR = {tpr:.2f}, TNR = {tnr:.2f}")
 
 #ROC curve
-from sklearn.metrics import RocCurveDisplay
-fpr, tpr, thresholds = metrics.roc_curve(y_test,y_pred_test)
-roc_auc = metrics.auc(fpr, tpr)
-roc_displayDT = RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc, estimator_name='Gradient Boosting')
+# from sklearn.metrics import RocCurveDisplay
+# fpr, tpr, thresholds = metrics.roc_curve(y_test,y_pred_test)
+# roc_auc = metrics.auc(fpr, tpr)
+# roc_displayDT = RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc, estimator_name='Gradient Boosting')
 
 # Precision-Recall Curve
 from sklearn.metrics import precision_recall_curve
@@ -291,3 +291,26 @@ kfold2 = model_selection.ShuffleSplit(n_splits=10, test_size=0.30, random_state=
 model_shufflecv = GradientBoostingClassifier()
 results_shufflecv = model_selection.cross_val_score(model_shufflecv, X, y, cv=kfold2)
 print(f"Repeated Random Test-Train Splits Accuracy: {results_shufflecv.mean()} ({results_shufflecv.std()})")
+
+#ROC curves on same plot
+from sklearn.metrics import RocCurveDisplay
+#set up plotting area
+plt.figure()
+#Random Forest plot ROC curve
+fpr, tpr, _ = metrics.roc_curve(y_test,y_test_pred)
+roc_auc = round(metrics.roc_auc_score(y_test, y_test_pred), 4)
+plt.plot(fpr, tpr, label="Decision Tree, AUC="+str(roc_auc))
+#Gradient Boosting plot ROC curve
+fpr, tpr, _ = metrics.roc_curve(y_test,y_pred_test)
+roc_auc = round(metrics.roc_auc_score(y_test, y_pred_test), 4)
+plt.plot(fpr, tpr, label="Gradient Boosting, AUC="+str(roc_auc))
+#add legend
+plt.legend()
+plt.show()
+
+#Precision-Recall curves on same plot
+
+
+
+
+
