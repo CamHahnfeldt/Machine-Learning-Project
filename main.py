@@ -128,16 +128,16 @@ for i in range(n_classes):
 # roc_displayDT = RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc, estimator_name='Random Forest')
 
 # Precision-Recall Curve
-from sklearn.metrics import precision_recall_curve
-from sklearn.metrics import PrecisionRecallDisplay
-prec, recall, _ = precision_recall_curve(y_test, y_test_pred)
-pr_displayDT = PrecisionRecallDisplay(precision=prec, recall=recall)
+# from sklearn.metrics import precision_recall_curve
+# from sklearn.metrics import PrecisionRecallDisplay
+# prec, recall, _ = precision_recall_curve(y_test, y_test_pred)
+# pr_displayDT = PrecisionRecallDisplay(precision=prec, recall=recall)
 
 #Curves side by side
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
-roc_displayDT.plot(ax=ax1)
-pr_displayDT.plot(ax=ax2)
-plt.show()
+# fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
+# roc_displayDT.plot(ax=ax1)
+# pr_displayDT.plot(ax=ax2)
+# plt.show()
 
 #k-fold cross validation
 kfold = model_selection.KFold(n_splits=10)
@@ -253,16 +253,16 @@ for i in range(n_classes):
 # roc_displayDT = RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc, estimator_name='Gradient Boosting')
 
 # Precision-Recall Curve
-from sklearn.metrics import precision_recall_curve
-from sklearn.metrics import PrecisionRecallDisplay
-prec, recall, _ = precision_recall_curve(y_test, y_pred_test)
-pr_displayDT = PrecisionRecallDisplay(precision=prec, recall=recall)
+# from sklearn.metrics import precision_recall_curve
+# from sklearn.metrics import PrecisionRecallDisplay
+# prec, recall, _ = precision_recall_curve(y_test, y_pred_test)
+# pr_displayDT = PrecisionRecallDisplay(precision=prec, recall=recall)
 
 #Curves side by side
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
-roc_displayDT.plot(ax=ax1)
-pr_displayDT.plot(ax=ax2)
-plt.show()
+# fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
+# roc_displayDT.plot(ax=ax1)
+# pr_displayDT.plot(ax=ax2)
+# plt.show()
 
 #k-fold cross validation
 kfold = model_selection.KFold(n_splits=10)
@@ -293,7 +293,6 @@ results_shufflecv = model_selection.cross_val_score(model_shufflecv, X, y, cv=kf
 print(f"Repeated Random Test-Train Splits Accuracy: {results_shufflecv.mean()} ({results_shufflecv.std()})")
 
 #ROC curves on same plot
-from sklearn.metrics import RocCurveDisplay
 #set up plotting area
 plt.figure()
 #Random Forest plot ROC curve
@@ -309,7 +308,19 @@ plt.legend()
 plt.show()
 
 #Precision-Recall curves on same plot
-
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import PrecisionRecallDisplay
+plt.figure()
+#Random Forest
+prec, recall, _ = precision_recall_curve(y_test, y_test_pred)
+pr_display = PrecisionRecallDisplay(precision=prec, recall=recall, estimator_name="Random Forest")
+pr_display.plot(ax=plt.gca(), color='b')
+#Gradient Boosting
+prec, recall, _ = precision_recall_curve(y_test, y_pred_test)
+pr_display = PrecisionRecallDisplay(precision=prec, recall=recall, estimator_name="Gradient Boosting")
+pr_display.plot(ax=plt.gca(), color='r')
+#plot
+plt.show()
 
 
 
