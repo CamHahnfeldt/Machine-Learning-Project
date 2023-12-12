@@ -81,6 +81,10 @@ feature_cols = ['TEAM', 'MATCH UP', #'PTS',
 X = combined[feature_cols] # Features
 y = combined['W/L'] # Target variable
 
+# Split dataset into training set and test set
+# 50% training and 50% test
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
+
 # Finding the best value for the max_depth
 def lookAtModels(models):
     results=[]
@@ -162,10 +166,6 @@ getAccuracy = getForestEstimators(101)
     #print(f'k: {count} accuracy: {value}')
 print(f'Best n: {getAccuracy.index(max(getAccuracy))}'
      f' accuracy: {getAccuracy[getAccuracy.index(max(getAccuracy))]}')
-
-# Split dataset into training set and test set
-# 70% training and 30% test
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
 
 forest = RandomForestClassifier(n_estimators=44, max_depth = 11, random_state=42)
 forest.fit(X_train, y_train)
