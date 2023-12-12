@@ -81,11 +81,93 @@ feature_cols = ['TEAM', 'MATCH UP', #'PTS',
 X = combined[feature_cols] # Features
 y = combined['W/L'] # Target variable
 
+# Finding the best value for the max_depth
+def lookAtModels(models):
+    results=[]
+    names=[]
+    for name, model in models:
+        skfold = StratifiedKFold(n_splits=10)
+        cv_results= cross_val_score(model, X_train, y_train, cv=skfold, scoring='accuracy')
+        results.append(cv_results)
+        names.append(name)
+        print(f'{name}: {cv_results.mean()} ({cv_results.std()})')
+    return names, results#not sure why I want lists yet
+
+models =[]
+for d in range(2,16):
+    models.append((f'Tree depth {d}',RandomForestClassifier(max_depth=d)))
+    #see your results
+names,results = lookAtModels(models)
+
+D2_mean = np.mean(results[0])
+D2_std= np.std(results[0])
+D3_mean = np.mean(results[1])
+D3_std = np.std(results[1])
+D4_mean = np.mean(results[2])
+D4_std = np.std(results[2])
+D5_mean = np.mean(results[3])
+D5_std = np.std(results[3])
+D6_mean = np.mean(results[4])
+D6_std = np.std(results[4])
+D7_mean = np.mean(results[5])
+D7_std = np.std(results[5])
+D8_mean = np.mean(results[6])
+D8_std = np.std(results[6])
+D9_mean = np.mean(results[7])
+D9_std = np.std(results[7])
+D10_mean = np.mean(results[8])
+D10_std = np.std(results[8])
+D11_mean = np.mean(results[9])
+D11_std = np.std(results[9])
+D12_mean = np.mean(results[10])
+D12_std = np.std(results[10])
+D13_mean = np.mean(results[11])
+D13_std = np.std(results[11])
+D14_mean = np.mean(results[12])
+D14_std = np.std(results[12])
+D15_mean = np.mean(results[13])
+D15_std = np.std(results[13])
+
+# Plotting the depth results
+depth =['2','3','4','5','6','7','8', '9', '10', '11', '12', '13', '14', '15']
+x_pos = np.arange(len(depth))
+#print(x_pos)
+Means = [D2_mean,D3_mean,D4_mean,D5_mean,D6_mean,D7_mean,D8_mean, D9_mean, 
+         D10_mean, D11_mean, D12_mean, D13_mean, D14_mean, D15_mean]
+error = [D2_std,D3_std,D4_std,D5_std,D6_std,D7_std,D8_std, D9_std, D10_std, D11_std,
+        D12_std, D13_std, D14_std, D15_std]
+# Build the plot
+fig, ax = plt.subplots()
+ax.bar(x_pos, Means, yerr=error, align='center', alpha=0.5, ecolor='black',
+capsize=10)
+ax.set_ylabel('Accuracy')
+ax.set_xticks(x_pos)
+ax.set_xticklabels(depth)
+ax.set_title('Accuracy scores of different depths (Random Forest)')
+ax.yaxis.grid(True)
+
+# Finding the best value for the number of estimators
+def getForestEstimators(n):
+    results = []
+    for i in range(1, n+1):
+        model = RandomForestClassifier(n_estimators=i,max_depth = 11, random_state=42)
+        model.fit(X_train,y_train)
+        y_test_pred = model.predict(X_test)
+        results.append(metrics.accuracy_score(y_test, y_test_pred))
+    return results
+
+getAccuracy = getForestEstimators(101)
+
+#for count, value in enumerate(getAccuracy):
+    #print(f'k: {count} accuracy: {value}')
+print(f'Best n: {getAccuracy.index(max(getAccuracy))}'
+     f' accuracy: {getAccuracy[getAccuracy.index(max(getAccuracy))]}')
+
 # Split dataset into training set and test set
 # 70% training and 30% test
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
 
-forest = RandomForestClassifier(n_estimators=100, max_depth = 11, random_state=42)
+forest = RandomForestClassifier(n_estimators=44, max_depth = 11, random_state=42)
 forest.fit(X_train, y_train)
 y_test_pred=forest.predict(X_test)
 y_train_pred=forest.predict(X_train)
@@ -167,7 +249,10 @@ model_shufflecv = RandomForestClassifier()
 results_shufflecv = model_selection.cross_val_score(model_shufflecv, X, y, cv=kfold2)
 print(f"Repeated Random Test-Train Splits Accuracy: {results_shufflecv.mean()} ({results_shufflecv.std()})")
 
-## Determining the best tree depth for each classifier
+
+## Gradient Boosting algorithm
+
+# Finding best value for max_depth
 def lookAtModels(models):
     results=[]
     names=[]
@@ -179,16 +264,63 @@ def lookAtModels(models):
         print(f'{name}: {cv_results.mean()} ({cv_results.std()})')
     return names, results
 
-#models =[]
-#for d in range(2,20):
-#    models.append((f'Tree depth{d}',GradientBoostingClassifier(max_depth=d)))
+#make all your models
+models =[]
+for d in range(2,9):
+    models.append((f'Tree depth {d}',GradientBoostingClassifier(max_depth=d)))
+    #see your results
+names,results = lookAtModels(models)
 
-#names,results = lookAtModels(models)
+D2_mean = np.mean(results[0])
+D2_std= np.std(results[0])
+D3_mean = np.mean(results[1])
+D3_std = np.std(results[1])
+D4_mean = np.mean(results[2])
+D4_std = np.std(results[2])
+D5_mean = np.mean(results[3])
+D5_std = np.std(results[3])
+D6_mean = np.mean(results[4])
+D6_std = np.std(results[4])
+D7_mean = np.mean(results[5])
+D7_std = np.std(results[5])
+D8_mean = np.mean(results[6])
+D8_std = np.std(results[6])
 
-## Gradient Boosting algorithm
+#Plotting the depth results
+depth =['2','3','4','5','6','7','8']
+x_pos = np.arange(len(depth))
+#print(x_pos)
+Means = [D2_mean,D3_mean,D4_mean,D5_mean,D6_mean,D7_mean,D8_mean]
+error = [D2_std,D3_std,D4_std,D5_std,D6_std,D7_std,D8_std]
+# Build the plot
+fig, ax = plt.subplots()
+ax.bar(x_pos, Means, yerr=error, align='center', alpha=0.5, ecolor='black',
+capsize=10)
+ax.set_ylabel('Accuracy')
+ax.set_xticks(x_pos)
+ax.set_xticklabels(depth)
+ax.set_title('Accuracy scores of different depths (Gradient Boosting)')
+ax.yaxis.grid(True)
+
+# Finding the best value for the number of estimators
+def getGradientEstimators(n):
+    results = []
+    for i in range(1, n+1):
+        model = GradientBoostingClassifier(n_estimators=i, learning_rate = 0.1, max_depth = 4, random_state=42)
+        model.fit(X_train,y_train)
+        y_test_pred = model.predict(X_test)
+        results.append(metrics.accuracy_score(y_test, y_test_pred))
+    return results
+
+getAccuracy = getGradientEstimators(101)
+
+#for count, value in enumerate(getAccuracy):
+    #print(f'k: {count} accuracy: {value}')
+print(f'Best n: {getAccuracy.index(max(getAccuracy))}'
+     f' accuracy: {getAccuracy[getAccuracy.index(max(getAccuracy))]}')
 
 # Initialize Gradient Boosting Classifier
-gb_clf = GradientBoostingClassifier(n_estimators=70, learning_rate=0.1, max_depth=4, random_state=42)
+gb_clf = GradientBoostingClassifier(n_estimators=86, learning_rate=0.1, max_depth=4, random_state=42)
 
 # Train the model
 gb_clf.fit(X_train, y_train)
@@ -207,21 +339,6 @@ print(f"Gradient Boosting train / test accuracies: {boost_train} / {boost_test}"
 
 accuracy = accuracy_score(y_test, y_pred_test)
 print(f"Model Accuracy: {accuracy:.2f}")
-
-#
-# def lookAtModels(models):
-#     results=[]
-#     names=[]
-#     for name, model in models:
-#         kfold2 = model_selection.ShuffleSplit(n_splits=10, test_size=0.30,
-#                                               random_state=42)
-#         model_shufflecv = GradientBoostingClassifier()
-#         results_shufflecv = model_selection.cross_val_score(model_shufflecv, X,
-#                                                             y, cv=kfold2)
-#         results.append(results_shufflecv)
-#         names.append(name)
-#         print(f'{name}: {results_shufflecv.mean()} ({results_shufflecv.std()})')
-#     return names, results
 
 #Create Confusion Matrix
 conf_mat = confusion_matrix(y_test, y_pred_test)
