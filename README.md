@@ -8,7 +8,7 @@ In this project, we aim to preidct the outcome of basketball games using machine
 
 To set up this project, follow these steps:
 
-1. Clone the repository: git clone
+1. Clone the repository: 'git clone https://github.com/CamHahnfeldt/Machine-Learning-Project.git'
 2. Install required Python packages: pip install matplotlib, pip install numpy, pip install pandas
 
 **Data Sources:**
