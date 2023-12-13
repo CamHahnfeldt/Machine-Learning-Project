@@ -28,15 +28,18 @@ col_names = ['TEAM', 'MATCH UP', 'GAME DATE', 'W/L', 'MIN', 'PTS',
 # load dataset
 
 s2021_2022 = pd.read_csv("2021-2022Season.csv", header=None, names=col_names)
-s2022_2023 = pd.read_csv("2022-2023Season.csv", header=None, names=col_names)
-s2023_2024 = pd.read_csv("2023-2024Season.csv", header=None, names=col_names)
+# THESE WERE USED IN THE PROJECT
+#s2022_2023 = pd.read_csv("2022-2023Season.csv", header=None, names=col_names)
+#s2023_2024 = pd.read_csv("2023-2024Season.csv", header=None, names=col_names)
 
 #print(s2021_2022)
 #print(s2022_2023)
 #print(s2023_2024)
 
 # Combining the three datasets to make one to train on
-combined = pd.concat([s2021_2022, s2022_2023, s2023_2024])
+# THIS WAS USED IN THE PROJECT
+# combined = pd.concat([s2021_2022, s2022_2023, s2023_2024])
+ combined = pd.concat([s2021_2022])
 
 # This takes out the vs. or @ so that we just have one team as the 'opposing team'
 def get_opposing_team(row):
