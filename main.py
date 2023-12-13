@@ -7,6 +7,8 @@ import numpy as np
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
 from sklearn import model_selection
 
