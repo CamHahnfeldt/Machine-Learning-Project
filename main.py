@@ -85,6 +85,90 @@ y = combined['W/L'] # Target variable
 # 50% training and 50% test
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
 
+#Cross Validation
+print("Cross Validation")
+print("Random Forest")
+#k-fold cross validation
+kfold = model_selection.KFold(n_splits=10)
+model_kfold = RandomForestClassifier()
+results_kfold = model_selection.cross_val_score(model_kfold, X, y, cv=kfold)
+print(f"K-Fold Accuracy: {results_kfold.mean()} ({results_kfold.std()})")
+
+#stratified k-fold
+skfold = StratifiedKFold(n_splits=10)
+model_skfold = RandomForestClassifier()
+results_skfold = model_selection.cross_val_score(model_skfold, X, y, cv=skfold)
+print(f"Stratified K-Fold Accuracy: {results_skfold.mean()} ({results_skfold.std()})")
+
+#Repeated Random Test-Train splits
+kfold2 = model_selection.ShuffleSplit(n_splits=10, test_size=0.30, random_state=42)
+model_shufflecv = RandomForestClassifier()
+results_shufflecv = model_selection.cross_val_score(model_shufflecv, X, y, cv=kfold2)
+print(f"Repeated Random Test-Train Splits Accuracy: {results_shufflecv.mean()} ({results_shufflecv.std()})")
+
+print()
+
+print("Gradient Boosting")
+#k-fold cross validation
+kfold = model_selection.KFold(n_splits=10)
+model_kfold = GradientBoostingClassifier()
+results_kfold = model_selection.cross_val_score(model_kfold, X, y, cv=kfold)
+print(f"K-Fold Accuracy: {results_kfold.mean()} ({results_kfold.std()})")
+
+#stratified k-fold
+skfold = StratifiedKFold(n_splits=10)
+model_skfold = GradientBoostingClassifier()
+results_skfold = model_selection.cross_val_score(model_skfold, X, y, cv=skfold)
+print(f"Stratified K-Fold Accuracy: {results_skfold.mean()} ({results_skfold.std()})")
+
+#Repeated Random Test-Train splits
+kfold2 = model_selection.ShuffleSplit(n_splits=10, test_size=0.30, random_state=42)
+model_shufflecv = GradientBoostingClassifier()
+results_shufflecv = model_selection.cross_val_score(model_shufflecv, X, y, cv=kfold2)
+print(f"Repeated Random Test-Train Splits Accuracy: {results_shufflecv.mean()} ({results_shufflecv.std()})")
+
+print()
+
+print("Decision Tree")
+#k-fold cross validation
+kfold = model_selection.KFold(n_splits=10)
+model_kfold = DecisionTreeClassifier()
+results_kfold = model_selection.cross_val_score(model_kfold, X, y, cv=kfold)
+print(f"K-Fold Accuracy: {results_kfold.mean()} ({results_kfold.std()})")
+
+#stratified k-fold
+skfold = StratifiedKFold(n_splits=10)
+model_skfold = DecisionTreeClassifier()
+results_skfold = model_selection.cross_val_score(model_skfold, X, y, cv=skfold)
+print(f"Stratified K-Fold Accuracy: {results_skfold.mean()} ({results_skfold.std()})")
+
+#Repeated Random Test-Train splits
+kfold2 = model_selection.ShuffleSplit(n_splits=10, test_size=0.30, random_state=42)
+model_shufflecv = DecisionTreeClassifier()
+results_shufflecv = model_selection.cross_val_score(model_shufflecv, X, y, cv=kfold2)
+print(f"Repeated Random Test-Train Splits Accuracy: {results_shufflecv.mean()} ({results_shufflecv.std()})")
+
+print()
+
+print("Gaussian Classifier")
+#k-fold cross validation
+kfold = model_selection.KFold(n_splits=10)
+model_kfold = GaussianNB()
+results_kfold = model_selection.cross_val_score(model_kfold, X, y, cv=kfold)
+print(f"K-Fold Accuracy: {results_kfold.mean()} ({results_kfold.std()})")
+
+#stratified k-fold
+skfold = StratifiedKFold(n_splits=10)
+model_skfold = GaussianNB()
+results_skfold = model_selection.cross_val_score(model_skfold, X, y, cv=skfold)
+print(f"Stratified K-Fold Accuracy: {results_skfold.mean()} ({results_skfold.std()})")
+
+#Repeated Random Test-Train splits
+kfold2 = model_selection.ShuffleSplit(n_splits=10, test_size=0.30, random_state=42)
+model_shufflecv = GaussianNB()
+results_shufflecv = model_selection.cross_val_score(model_shufflecv, X, y, cv=kfold2)
+print(f"Repeated Random Test-Train Splits Accuracy: {results_shufflecv.mean()} ({results_shufflecv.std()})")
+
 # Finding the best value for the max_depth
 def lookAtModels(models):
     results=[]
@@ -221,34 +305,6 @@ for i in range(n_classes):
 # pr_displayDT.plot(ax=ax2)
 # plt.show()
 
-#k-fold cross validation
-kfold = model_selection.KFold(n_splits=10)
-model_kfold = RandomForestClassifier()
-results_kfold = model_selection.cross_val_score(model_kfold, X, y, cv=kfold)
-print(f"K-Fold Accuracy: {results_kfold.mean()} ({results_kfold.std()})")
-
-#stratified k-fold
-skfold = StratifiedKFold(n_splits=10)
-model_skfold = RandomForestClassifier()
-results_skfold = model_selection.cross_val_score(model_skfold, X, y, cv=skfold)
-print(f"Stratified K-Fold Accuracy: {results_skfold.mean()} ({results_skfold.std()})")
-
-#LOOCV
-'''
-Takes too long to run
-
-loocv = model_selection.LeaveOneOut()
-model_loocv = RandomForestClassifier()
-results_loocv = model_selection.cross_val_score(model_loocv, X, y, cv=loocv)
-print(f"LOOCV Accuracy: {results_loocv.mean()} ({results_loocv.std()})")
-'''
-
-#Repeated Random Test-Train splits
-kfold2 = model_selection.ShuffleSplit(n_splits=10, test_size=0.30, random_state=42)
-model_shufflecv = RandomForestClassifier()
-results_shufflecv = model_selection.cross_val_score(model_shufflecv, X, y, cv=kfold2)
-print(f"Repeated Random Test-Train Splits Accuracy: {results_shufflecv.mean()} ({results_shufflecv.std()})")
-
 
 ## Gradient Boosting algorithm
 
@@ -380,34 +436,6 @@ for i in range(n_classes):
 # roc_displayDT.plot(ax=ax1)
 # pr_displayDT.plot(ax=ax2)
 # plt.show()
-
-#k-fold cross validation
-kfold = model_selection.KFold(n_splits=10)
-model_kfold = GradientBoostingClassifier()
-results_kfold = model_selection.cross_val_score(model_kfold, X, y, cv=kfold)
-print(f"K-Fold Accuracy: {results_kfold.mean()} ({results_kfold.std()})")
-
-#stratified k-fold
-skfold = StratifiedKFold(n_splits=10)
-model_skfold = GradientBoostingClassifier()
-results_skfold = model_selection.cross_val_score(model_skfold, X, y, cv=skfold)
-print(f"Stratified K-Fold Accuracy: {results_skfold.mean()} ({results_skfold.std()})")
-
-#LOOCV
-'''
-Takes too long to run
-
-loocv = model_selection.LeaveOneOut()
-model_loocv = GradientBoostingClassifier()
-results_loocv = model_selection.cross_val_score(model_loocv, X, y, cv=loocv)
-print(f"LOOCV Accuracy: {results_loocv.mean()} ({results_loocv.std()})")
-'''
-
-#Repeated Random Test-Train splits
-kfold2 = model_selection.ShuffleSplit(n_splits=10, test_size=0.30, random_state=42)
-model_shufflecv = GradientBoostingClassifier()
-results_shufflecv = model_selection.cross_val_score(model_shufflecv, X, y, cv=kfold2)
-print(f"Repeated Random Test-Train Splits Accuracy: {results_shufflecv.mean()} ({results_shufflecv.std()})")
 
 #ROC curves on same plot
 #set up plotting area
