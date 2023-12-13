@@ -154,7 +154,7 @@ ax.yaxis.grid(True)
 def getForestEstimators(n):
     results = []
     for i in range(1, n+1):
-        model = RandomForestClassifier(n_estimators=i,max_depth = 11, random_state=42)
+        model = RandomForestClassifier(n_estimators=i,max_depth = 15, random_state=42)
         model.fit(X_train,y_train)
         y_test_pred = model.predict(X_test)
         results.append(metrics.accuracy_score(y_test, y_test_pred))
@@ -167,7 +167,7 @@ getAccuracy = getForestEstimators(101)
 print(f'Best n: {getAccuracy.index(max(getAccuracy))}'
      f' accuracy: {getAccuracy[getAccuracy.index(max(getAccuracy))]}')
 
-forest = RandomForestClassifier(n_estimators=44, max_depth = 11, random_state=42)
+forest = RandomForestClassifier(n_estimators=99, max_depth = 15, random_state=42)
 forest.fit(X_train, y_train)
 y_test_pred=forest.predict(X_test)
 y_train_pred=forest.predict(X_train)
@@ -320,7 +320,7 @@ print(f'Best n: {getAccuracy.index(max(getAccuracy))}'
      f' accuracy: {getAccuracy[getAccuracy.index(max(getAccuracy))]}')
 
 # Initialize Gradient Boosting Classifier
-gb_clf = GradientBoostingClassifier(n_estimators=86, learning_rate=0.1, max_depth=4, random_state=42)
+gb_clf = GradientBoostingClassifier(n_estimators=85, learning_rate=0.1, max_depth=4, random_state=42)
 
 # Train the model
 gb_clf.fit(X_train, y_train)
